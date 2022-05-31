@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/a6dac0a9-f359-4817-88ad-c3b160109ec7/microsoft.web/sites/subscriptions/a6dac0a9-f359-4817-88ad-c3b160109ec7/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/gdprBackEnd",
-    "appService.deploySubpath": "."
-}
