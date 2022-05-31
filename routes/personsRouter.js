@@ -27,13 +27,13 @@ router.get('/',
 );
 
 // get person data by id number
-router.get('/get-person',
+router.get('/get-person/:id_number',
   passport.authenticate('jwt', {session: false}),
   checkRoles('HUM'),
-  validatorHandler(getByIdNumberSchema, 'body'),
+  validatorHandler(getByIdNumberSchema, 'params'),
   async (req,res, next) => {
     try {
-      const { id_number } = req.body;
+      const { id_number } = req.params;
       const person = await service.getPersonByIdNumber(id_number);
       res.status(201).json(person);
     } catch (error) {
