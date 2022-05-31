@@ -37,7 +37,6 @@ const getPatientSchema = Joi.object({
 const updatePatientSchema = Joi.object({
   height: height,
   weight: weight,
-  rh: rh.required(),
   patient_id: patient_id.required()
 });
 
