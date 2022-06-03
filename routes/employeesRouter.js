@@ -129,12 +129,12 @@ router.get('/full-data',
 );
 
 // Get full data of patient for third party
-router.get('/one-patient-full-data',
+router.get('/one-patient-full-data/:id_number',
   passport.authenticate('jwt', {session: false}),
   checkRoles('HUM'),
   async (req,res, next) => {
     try {
-      const { id_number } = req.body;
+      const { id_number } = req.params;
       const data = await service.getPatientForThridParty(id_number);
       res.status(201).json(data);
     } catch (error) {
