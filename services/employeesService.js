@@ -29,7 +29,9 @@ class EmployeesService {
         html: `<b>Alguien ha intentado crear una cuenta con su numero de identificación. Contáctese con nosotros para más información.</b>`
       });
       throw boom.conflict("There's someone already registered.");
-    } else {
+    }else if (await personsService.isEmailRegistered(data.person.email)){
+      throw boom.conflict("There's someone already registered with that email.");
+    }else {
       const newUser = await usersService.create(data.user, data.person.email);
       const newPerson = await personsService.create(data.person, newUser.user_id);
       return await this.create(data.employee,newPerson.person_id);

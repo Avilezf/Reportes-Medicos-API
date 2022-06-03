@@ -143,6 +143,13 @@ class PersonsService {
     }
   }
 
+  async isEmailRegistered(email) {
+    //select email from v_persons where email = 'victmma@gmail.com';
+    const query = "select email from v_persons where email = '"+email+"';";
+    const result = await this.pool.query(query);
+    return result.rows[0]? true:false;
+  }
+
   //-------------------------------Private methods-------------------------------//
   async findPersonByUserId(user_id) {
     const person = await this.pool.query("select person_id from v_persons where user_id = '"+user_id+"';");
