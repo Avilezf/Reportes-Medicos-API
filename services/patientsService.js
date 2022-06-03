@@ -61,20 +61,30 @@ class PatientsService {
 
   //get patient data
   async getPatientData(patient_id){
+    const patient_info = await this.pool.query(
+      "select * \n"+
+      "from v_patients \n"+
+      "where v_patients.patient_id = '"+patient_id+"' \n"+
+      "limit 1;"
+      );
     const query = (
-      "select v_persons.*, v_patients.* \n"+
+      "select v_persons.* \n"+
       "from v_patients \n"+
       "join v_persons \n"+
       "    on v_persons.person_id = v_patients.person_id \n"+
       "where v_patients.patient_id = '"+patient_id+"' \n"+
       "limit 1;"
     );
-    const result = await this.pool.query(query);
-    delete result.rows[0].person_id;
-    delete result.rows[0].user_id;
-    delete result.rows[0].attendant_id;
-    delete result.rows[0].patient_id;
-    const data = format(result.rows)[0];
+    const person_info = await this.pool.query(query);
+    delete person_info.rows[0].person_id;
+    delete person_info.rows[0].user_id;
+    delete person_info.rows[0].attendant_id;
+    delete patient_info.rows[0].patient_id;
+    delete patient_info.rows[0].person_id;
+    const data = {
+      person_info: format(person_info.rows)[0],
+      patient_info: format(patient_info.rows)[0]
+    };
     if (data){
       return data;
     } else {
