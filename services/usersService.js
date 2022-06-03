@@ -43,7 +43,7 @@ class UsersService {
     }
     const payload = { user_id: user.user_id };
     const token = jwt.sign(payload, config.jwtSecret, {expiresIn: '15min'});
-    const link = `${config.feUrl}/recovery?token=${token}`;
+    const link = `${config.feUrl}/recovery/${token}`;
     const query = (
       "update users \n" +
       "set recovery_token = '"+token+"' \n" +
