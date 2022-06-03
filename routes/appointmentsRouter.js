@@ -42,7 +42,9 @@ router.get('/',
   checkRoles('MED','HUM'),
   async (req,res, next) => {
     try {
-      const filters = req.body;
+      const filters = req.query;
+      if (filters.limit) filters.limit = parseInt(filters.limit);
+      if (filters.offset) filters.offset = parseInt(filters.offset);
       const appointments = await service.getAppointments(filters);
       res.status(201).json(appointments);
     } catch (error) {
