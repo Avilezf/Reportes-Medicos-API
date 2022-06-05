@@ -1,8 +1,43 @@
 
 const AppoinmentsService = require("../../services/appointmentsService");
+const Pool = require('pg-pool')
+const client = require('./poolClient')
 
 //--------------------------------  Create ------------------------------------
 describe("Create appointment", () => {
+
+  beforeAll('Mock db connection and load app', async function () {
+    // Create a new pool with a connection limit of 1
+    const pool = new Pool({
+      database: 'postgres',
+      user: 'postgres',
+      password: 'example',
+      port: 5432,
+      max: 1, // Reuse the connection to make sure we always hit the same temporal schema
+      idleTimeoutMillis: 0 // Disable auto-disconnection of idle clients to make sure we always hit the same temporal schema
+    })
+
+    // Mock the query function to always return a connection from the pool we just created
+    client.query = (text, values) => {
+      return pool.query(text, values)
+    }
+
+    // It's important to import the app after mocking the database connection
+      let app = require('./index')
+  })
+
+  beforeEach('Create temporary tables', async function () {
+    await client.query('CREATE TEMPORARY TABLE appointment (LIKE appointment INCLUDING ALL)') // This will copy constraints also
+  })
+
+  // Optionally we could insert fake data before each test, but in this case it's not needed
+  // beforeEach('Insert fake data', async function () {
+  //   await client.query('INSERT INTO pg_temp.note (name, content) VALUES ("a_note", "some_content")')
+  // })
+
+  afterEach('Drop temporary tables', async function () {
+    await client.query('DROP TABLE IF EXISTS pg_temp.appointment')
+  })
 
   test('Appointment Created', async () => {
 
